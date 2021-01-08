@@ -2,6 +2,14 @@
 
 Closinder主張簡約，乾淨，讓使用者第一印象感覺喜不喜歡衣服。
 
+下載專案說明 ：
+
+-  先需要安裝composer套件，以及npm管理套件，並將專案拉至本地後，設定根目錄底下.env檔案以確認連線之資料庫。
+-  啟用此專案前請先於根目錄底下開啟cmd or Terminal 輸入 php artisan key:generate，使本專案具有金鑰啟動。
+-  並設置預設資料表輸入指令 php artisan migration:refresh。
+-  開啟本地端伺服器或nginx使用本專案。
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">

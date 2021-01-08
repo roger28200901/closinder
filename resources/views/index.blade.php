@@ -4,7 +4,15 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+         <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <title>{{ config('app.name', 'Closinder') }}</title>
+
+        <!-- Scripts -->
+        <script src="{{ asset('js/jquery.js') }}" ></script>
+
+        
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
@@ -217,13 +225,13 @@
                 </div>
                 <div class="flex option-container">
                     <ul class="nav">
-                        <li class="nav-item active">
+                        <li class="nav-item option-item active">
                             <button>喜歡的商品</button>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item option-item">
                             <button>留言板</button>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item option-item">
                             <button>設定</button>
                         </li>
                     </ul>
@@ -321,3 +329,12 @@
         </div>
     </body>
 </html>
+
+<script>
+    $(document).ready(function() {
+        $('.option-item').on('click', function () {
+            $('.option-item').removeClass('active');
+            $(this).addClass('active');
+        }); 
+    })
+</script>

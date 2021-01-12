@@ -20,12 +20,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware('checklogin')->group(function ($id) {
-    Route::get('/index', function () {
-        return view('index');
-    })->name('index');
+    
     Route::get('/index', 'MainController@index')->name('index');
+    Route::post('/like', 'LikesController@insert');
 });
 
-Route::post('/like', 'LikesController@insert');
-
+Route::post('/uploadMessage','MessageController@insert');
+Route::post('/updateUser','UserController@update')->name('updateUser');
 Route::get('/home', 'HomeController@index')->name('home');

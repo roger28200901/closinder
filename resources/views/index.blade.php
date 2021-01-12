@@ -1,3 +1,6 @@
+<?php
+    $user = Auth::user();
+?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -8,12 +11,15 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Closinder') }}</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
 
         <!-- Scripts -->
-        <script src="{{ asset('js/jquery.js') }}" ></script>
-        <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
-        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-        
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        {{-- <script src="{{ asset('js/jquery.js')}}"></script> --}}
+        <script src="{{ asset('js/jquery.mobile-1.4.5.js') }}" ></script>
+        <link rel="stylesheet" href="{{ asset('js/jquery.mobile-1.4.5.css') }}">
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
@@ -84,7 +90,6 @@
                 margin-bottom: 30px;
             }
             .left-side-aside {
-                border-right: 1px solid lightgray;
                 width: 25%;
             }
             aside {
@@ -113,10 +118,9 @@
                 margin-left: 1rem;
             }
             .main {
-                margin: auto;
                 width: 70%;
             }
-
+            
             button {
                 background-color: initial;
                 border-style: none;
@@ -126,18 +130,27 @@
                 line-height: inherit;
             }
             .option-container {
-                margin: 1rem;
+                border-right: 1px solid lightgray;
+                border-bottom: 1px solid lightgray;
+            }
+            .messageContainer {
+                height: 100%;
+                flex-wrap: wrap;
+                overflow-y: auto;
+                background: white;
+                border-right: 1px solid lightgray;
             }
             .matchContainer {
-                height: 80%;
-                display: flex;
+                height: 100%;
                 flex-wrap: wrap;
                 overflow-y:auto;
+                background: white;
+                border-right: 1px solid lightgray; 
             }
             .matchElement {
                 background-image: url("{{ asset('img/head.jpg') }}") ;
-                background-position: 50% 50%;
-                background-size: 200%;
+                background-position: center;
+                background-size: contain;
                 background-repeat:no-repeat;
                 height: 100px;
                 margin: 5%;
@@ -217,7 +230,104 @@
                 #desktop {
                     display: flex;
                 }
+
+                /* Tinder */
+
+                #container {
+                width: 100%;
+                height: 500px;
+                margin: auto !important;
+                display: block;
+                position: relative;
+                list-style-type: none;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                }
+                .buddy {
+                width: 50%;
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                color: #fff;
+                padding: 20px;
+                position: absolute;
+                cursor: hand;
+                top: 50px;
+                }
+                .buddy > * {
+                    width: 100%;
+                }
+                .rotate-left {
+                transform: rotate(30deg) scale(0.8);
+                transition: 1s;
+                margin-left: 400px;
+                cursor: e-resize;
+                opacity: 0;
+                z-index: 10;
+                }
+                .rotate-right {
+                transform: rotate(-30deg) scale(0.8);
+                transition: 1s;
+                opacity: 0;
+                margin-left: -400px;
+                cursor: w-resize;
+                z-index: 10;
+                }
+                .avatar {
+                width: 100%;
+                height: 350px;
+                display: block;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                }
+                .like {
+                border-radius: 5px;
+                padding: 5px 10px;
+                border: 2px solid green;
+                color: green;
+                text-transform: uppercase;
+                font-size: 15px;
+                position: absolute;
+                top: 50px;
+                right: 40px;
+                text-shadow: none;
+                }
+                .dislike {
+                border-radius: 5px;
+                padding: 5px 10px;
+                border: 2px solid red;
+                color: red;
+                text-transform: uppercase;
+                font-size: 15px;
+                position: absolute;
+                top: 50px;
+                left: 40px;
+                text-shadow: none;
+                }
+                .option-item > * {
+                    font-size: 12px;
+                }
+                .chat-head {
+                    border: 1px solid white;
+                    border-radius: 50%;
+                    background-position: 50% 50%;
+                    background-size: auto 125.581%; 
+                    width: 50px;
+                    height: 50px;  
+                }
+                .container {
+                    margin:auto;
+                    background: #e9e9e9;
+                    box-shadow: 0 0px 1px 0 rgba(0,17,25,.27);
+                }
             }
+
+            /* Mobile */
             @media screen and (max-width: 768px){
                 #desktop {
                     display: none;
@@ -250,7 +360,6 @@
 
                 #container {
                 width: 80%;
-                height: 500px;
                 margin: auto !important;
                 display: block;
                 position: relative;
@@ -341,7 +450,7 @@
                 }
                 .container {
                     margin:auto;
-                    background: #f7ddd1;
+                    background: #e9e9e9;
                     box-shadow: 0 0px 1px 0 rgba(0,17,25,.27);
                 }
                 .mobile-footer {
@@ -351,73 +460,31 @@
                     bottom: -120px;
                     width: 100%;
                 }
+
+                .profile-head {
+                    border-radius: 50%;
+                    width: 200px;
+                    height: 200px;
+                }
+                #profile-container {
+                    text-align:center;
+                    overflow: hidden;
+                }
+                .profile-information {
+                    text-align: left;
+                    color: #aaa;
+                }
             }       
             
 
         </style>
-        <script src="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
-        <script>
-            $(document).ready(function(){
-                
-                let page = 1 ;
-
-                $('.option-item').on('click', function () {
-                })
-            
-                $(".buddy").on("swiperight",function(){
-                    // Like
-                    $(this).addClass('rotate-left').delay(700).fadeOut(1, function () {
-                        $(this).remove();
-                        let sendData = {
-                            product_id : $(this).attr('item_id'),
-                            user_id : <?= Auth::user()->id ?>,
-                        }
-                        $.ajax({
-                            url: 'like',
-                            method: 'POST',
-                            data: sendData,
-                            success: function (response) {
-                                console.log(response)
-                            }
-                        })
-                    });
-                    $('.buddy').find('.status').remove();
-
-                    $(this).append('<div class="status like">Like!</div>');      
-                    $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
-                    
-                });  
-
-                $(".buddy").on("swipeleft",function(){
-                    // Dislike
-                    $(this).addClass('rotate-right').delay(700).fadeOut(1);
-                    $('.buddy').find('.status').remove();
-                    $(this).append('<div class="status dislike">Dislike!</div>');
-
-                    if ( $(this).is(':last-child') ) {
-                    $('.buddy:nth-child(1)').removeClass ('rotate-left rotate-right').fadeIn(300);
-                        alert('已經滑完所有類型');
-                    } else {
-                        $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
-                    } 
-                });
-                $('.option-item').on('click', function () {
-                    $('.option-item').removeClass('active');
-                    $(this).addClass('active');
-                    let id = $(this).attr('id');
-                    if (id == 'option-item-1') {
-                        $('.mobile-main-container').hide();
-                        $('#page-1').fadeIn();
-                    } else if (id == 'option-item-2') {
-                        $('.mobile-main-container').hide();
-                        $('#page-2').fadeIn();
-                    }
-                });
-
-            });
+       <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
 
-        </script>
     </head>
     <body>
         {{-- <div style="display: flex; justify-content: center; align-items : center;position: absolute; width: 100%; z-index : 999; background: white;height:100vh; color: gray; text-align:center">
@@ -450,7 +517,7 @@
                 </div>
                 {{-- Page 1 --}}
                 <div style="height:100%; " class="mobile-main-container" id="page-1">
-                        <div id="container" style="display: flex;justify-content:center; ">
+                        <div id="container" style="display: flex;justify-content:center; " class="m-product-container">
                             @foreach ($products as $product)
                             <div item_id="{{ $product['id'] }}" class="buddy" style="display: block;">
                                 <p style="color: black">{{$product['title']}}</p>
@@ -458,6 +525,9 @@
                                 style="display: block; background-image: 
                                     url({{ asset($product['img_url']) }}); z-index: {{ $product['id'] }} ">
                                 </div>
+                                <p style="color: black">
+                                    {{ $product['content'] }}
+                                </p>
                             </div>
                             @endforeach
                         </div>
@@ -470,55 +540,86 @@
                             </button>
                         </div>
                 </div>
-                {{--  Page 2--}}
+                {{--  Page 2 --}}
                 <div style="display:none" class="mobile-main-container" id="page-2">
                     <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
+                        <p>
+                            <i style="float: right" class="bi bi-arrows-fullscreen"></i>
+                        </p>
+                        <div class="upload-message-container">
+                            <form action="{{ action('MessageController@insert') }}" method="post">
+                                <b>標題</b>
+                                <input type="text" name="message-title-m">
+                                <b>內容</b>
+                                <textarea name="message-content-m" cols="30" rows="10"></textarea>
+                                <input type="button" id="btn-insert-message-m" value="新增留言">
+                            </form>
+                        </div>
                     </div>
-                    <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
-                    </div>
-                    <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
-                    </div>
-                    <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
-                    </div>
-                    <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
-                    </div>
-                    <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
-                    </div>
-                    <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
-                    </div>
-                    <div class="container">
-                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
-                        <b>Name</b>
-                        <p>Hello. How are you today?</p>
-                        <span class="time-right">11:00</span>
+                    @foreach ($messages as $message)
+                        <div class="container">
+                            <img class="chat-head" src="img/{{ $message->img_url}}" alt="Avatar" >
+                            <b>{{ $message->name}}</b>
+                            <p>
+                                <b>{{ $message->title}}</b>
+                            </p>
+                            <p>{{ $message->content}}</p>
+                            <span class="time-right">
+                                {{ $message->created_at}}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+                {{--  Page 3 --}}
+                <div style="display:none; height:100%" class="mobile-main-container" id="page-3">
+                    <div class="container" id="profile-container">
+                       
+
+                        <img src="img/{{ $user['img_url'] }}" class="profile-head" alt="">
+                        <p>
+                            {{ $user['name'] }}
+                        </p>
+                        <button id="btn-profile-setting">個人頁面設定</button>
+                        
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
+                            
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <form action="{{ route('updateUser') }}" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label for="">個人特徵：</label>
+                                            <textarea name="special" id="" cols="30" rows="10"></textarea>
+                                            <label for="">上傳照片：</label>
+                                            <input type="file" name="img_url">
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                                        <button id="btn-update-user" type="button" class="btn btn-success">更新</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            
+                            </div>
+                        </div>
+                        <div class="profile-information">
+                            <p>信箱：{{ $user['email']}}</p>
+                            <p>個人特徵：</p>
+                            <p style="overflow:auto">
+                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
+                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
+                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
+                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
+                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
+                            </p>
+                        </div>
                     </div>
                 </div>
         </div>
@@ -529,10 +630,10 @@
             <aside class="left-side-aside">
                 <div class="flex aside-profile">
                     {{-- 個人頭貼 --}}
-                    <img class="aside-head"  alt="">
-                    <h2 class="aside-content">
+                    <img class="aside-head" style="background-image:url('img/{{ $user['img_url']}}')"alt="">
+                    <h4 class="aside-content">
                         我的個人資料
-                    </h2>
+                    </h4>
                     {{-- Something --}}
                     <i></i>
                 </div>
@@ -547,87 +648,71 @@
                         <li id="option-item-3" class="nav-item option-item">
                             <button>設定</button>
                         </li>
+                        <li id="option-item-4" class="nav-item option-item">
+                            <button>
+                                <a style="color: black;" class="" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                              document.getElementById('logout-form').submit();">
+                                 {{ __('登出') }}
+                                </a>
+                            </button>
+                           
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                        </li>   
                     </ul>
                 </div>
 
                 <div class="matchContainer">
-                    <div class="matchElement">   
-                        Content;
+                    @foreach ($likes as $like)
+                        <div class="matchElement" style="background-image: url('{{ $like['img_url'] }}')">
+                            {{ $like['title'] }}
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="messageContainer">
+                    <div class="upload-message-container">
+                        <form action="{{ action('MessageController@insert') }}" method="post">
+                            <b>標題</b>
+                            <input type="text" name="message-title-d">
+                            <b>內容</b>
+                            <textarea name="message-content-d" cols="30" rows="10"></textarea>
+                            <input type="button" id="btn-insert-message-d" value="新增留言">
+                        </form>
                     </div>
-                    <div class="matchElement">   
-                        Content;
+                    @foreach ($messages as $message)
+                    <div class="container">
+                        <img class="chat-head" src="img/{{ $message->img_url}}" alt="Avatar" >
+                        <b>{{ $message->name}}</b>
+                        <p>
+                            <b>{{ $message->title}}</b>
+                        </p>
+                        <p>{{ $message->content}}</p>
+                        <span class="time-right">
+                            {{ $message->created_at}}
+                        </span>
                     </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
-                    <div class="matchElement">   
-                        Content;
-                    </div>
+                    @endforeach
                 </div>
             </aside>
-            <main class="container main flex-center position-ref">
-                <div class="main-card">
-                    <div class="main-card-image" alt="">
-                        {{-- 商品名稱 --}}
-                        <div class="main-card-content">
-                            <b class="main-card-title">商品名稱</b>
-                        {{-- 商品簡介 --}}
-                            <div class="main-card-introduction">
-                                <p>
-                                    Introduction
-                                </p>
-                            </div>
+            <main class="container position-ref ">
+                <div id="container" style="display: flex;justify-content:center; " class="d-product-container">
+                    @foreach ($products as $product)
+                    <div item_id="{{ $product['id'] }}" class="buddy" style="display: block;">
+                        <p style="color: black">{{$product['title']}}</p>
+                        <div class="avatar" 
+                                style="display: block; background-image: 
+                                    url({{ asset($product['img_url']) }}); z-index: {{ $product['id'] }} ">
                         </div>
-                        
+                        <p style="color: black">
+                            {{ $product['content'] }}
+                        </p>
                     </div>
+                @endforeach
+                </div>
+                <div class="main-card" style="width: auto;">
                     <div class="main-card-choose flex-center">
                         <button class="btn-dislike-border">
                             <i class="bi bi-hand-thumbs-down btn-dislike"></i>
@@ -640,4 +725,171 @@
             </main>
         </div>
     </body>
+
+    <script>
+        $(document).ready(function(){
+            console.log(1234)
+            let page = 1 ;
+
+            $('.option-item').on('click', function () {
+            })
+        
+            let drag = false;
+            let sx = null;
+            let dx = null;
+            let object = null;
+            $('.buddy').on('mousedown', function() {
+                drag = true
+                sx = event.clientX;
+                object = $(this);
+            });
+            $('html').on('mouseup', function () {
+                drag = false;
+                if (dx - sx > 30) {
+                    like(object);
+                } else {
+                    dislike(object);
+                }
+            })
+            $('.buddy').on('mousemove', function () {
+                if (drag) {
+                    dx = event.clientX;
+                }
+            });
+
+            $(".buddy").on("swiperight",function(){
+                // Like
+                like($(this));
+            });  
+
+            $(".buddy").on("swipeleft",function(){
+                // Dislike
+                dislike($(this));
+                
+            });
+            $('.btn-dislike-border').on('click', function () {
+                let top = null;
+                if(window.matchMedia("(max-width: 767px)").matches){
+                    // The viewport is less than 768 pixels wide
+                    top = $('.m-product-container .buddy:last-child')
+                } else{
+                    // The viewport is at least 768 pixels wide
+                    top = $('.d-product-container .buddy:last-child');
+                }
+                dislike(top);
+                
+            })
+            $('.btn-like-border').on('click', function () {
+                let top = null;
+                if(window.matchMedia("(max-width: 767px)").matches) {
+                    // The viewport is less than 768 pixels wide
+                    top = $('.m-product-container .buddy:last-child')
+                } else{
+                    // The viewport is at least 768 pixels wide
+                    
+                    top = $('.d-product-container .buddy:last-child');
+                }
+                console.log(top)
+                like(top);
+            })
+
+            $('#btn-profile-setting').on('click', function () {
+
+            });
+            function dislike (dislike) {
+                dislike.addClass('rotate-right').delay(700).fadeOut(1, function () {
+                    dislike.remove();
+                });
+                $('.buddy').find('.status').remove();
+                dislike.append('<div class="status dislike">Dislike!</div>');
+
+            }
+            function like (like) {
+                like.addClass('rotate-left').delay(700).fadeOut(1, function () {
+                    like.remove();
+                    let sendData = {
+                        product_id : like.attr('item_id'),
+                        user_id : <?= Auth::user()->id ?>,
+                    }
+                    $.ajax({
+                        url: 'like',
+                        method: 'POST',
+                        data: sendData,
+                        success: function (response) {
+                            console.log(response)
+                        }
+                    })
+                });
+                $('.buddy').find('.status').remove();
+
+                like.append('<div class="status like">Like!</div>');      
+                like.next().removeClass('rotate-left rotate-right').fadeIn(400);
+                
+            }
+            $('.option-item').on('click', function () {
+                $('.option-item').removeClass('active');
+                $(this).addClass('active');
+
+                let id = $(this).attr('id');
+                if(window.matchMedia("(max-width: 767px)").matches){
+                    // The viewport is less than 768 pixels wide
+                    if (id == 'option-item-1') {
+                        $('.mobile-main-container').hide();
+                        $('#page-1').fadeIn();
+                    } else if (id == 'option-item-2') {
+                        $('.mobile-main-container').hide();
+                        $('#page-2').fadeIn();
+                    } else if (id == 'option-item-3') {
+                        $('.mobile-main-container').hide();
+                        $('#page-3').fadeIn();
+                    }
+                } else{
+                    // The viewport is at least 768 pixels wide
+                    if (id== 'option-item-1') {
+                        $('.matchContainer').fadeIn();
+                    } else if (id == 'option-item-2') {
+                        $('.matchContainer').hide();
+                        $('.messageContainer').fadeIn()
+                    }
+                }
+                
+               
+            });
+            $('.bi-arrows-fullscreen').on('click', function() {
+                $('.upload-message-container').slideToggle();
+            })
+
+            $('#btn-insert-message-m').on('click', function () {
+                let sendData = {
+                    title : $('[name=message-title-m]').val(),
+                    content : $('[name=message-content-m]').val()
+                }
+                $.ajax({
+                    url:'uploadMessage',
+                    method: 'POST',
+                    data: sendData,
+                    success: function (response) {
+                        location.reload()
+                    }
+                })
+            })
+            $('#btn-insert-message-d').on('click', function () {
+                let sendData = {
+                    title : $('[name=message-title-d]').val(),
+                    content : $('[name=message-content-d]').val()
+                }
+                $.ajax({
+                    url:'uploadMessage',
+                    method: 'POST',
+                    data: sendData,
+                    success: function (response) {
+                        location.reload()
+                    }
+                })
+            })
+            
+        });
+
+
+    </script>
 </html>

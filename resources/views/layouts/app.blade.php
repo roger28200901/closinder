@@ -50,7 +50,7 @@
                                 </li>
                             @endif
                             <li class="nav-item">
-                                <a class="nav-link" href="https://github.com/">GitHub</a>
+                                <a class="nav-link" href="https://github.com/roger28200901/closinder">GitHub</a>
                             </li>
                         @else
                             <li class="nav-item dropdown">

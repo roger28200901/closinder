@@ -23,7 +23,9 @@ Route::middleware('checklogin')->group(function ($id) {
     Route::get('/index', function () {
         return view('index');
     })->name('index');
+    Route::get('/index', 'MainController@index')->name('index');
 });
 
+Route::post('/like', 'LikesController@insert');
 
 Route::get('/home', 'HomeController@index')->name('home');

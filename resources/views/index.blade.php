@@ -11,7 +11,8 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/jquery.js') }}" ></script>
-
+        <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
         
 
         <!-- Fonts -->
@@ -205,12 +206,324 @@
             .hide {
                 display: none;
             }
-            .active {
+           
+            @media screen and (min-width: 769px) {
+                .active {
                 border-bottom: 1px solid #fd267d;
+                }
+                #mobile  {
+                    display: none; 
+                }
+                #desktop {
+                    display: flex;
+                }
             }
+            @media screen and (max-width: 768px){
+                #desktop {
+                    display: none;
+                }
+                #mobile {
+                    font-size: 24px;
+                }
+                .mobile-nav {
+                    width: 100%;
+                }
+                .mobile-nav > * {
+                    width: 33%;
+                }
+                .mobile-nav > li {
+                    text-align: center;
+                }
+                .active {
+                    color: red;
+                }
+                .mobile-nav-container {
+                    width: 100%;
+                    padding: 5%;
+                    box-shadow: 0 1px 8px 0 rgba(0,17,25,.27);
+                }
+                .mobile-main-container {
+                    justify-content: center;
+                    align-items: center;
+                }
+                /* Tinder */
+
+                #container {
+                width: 80%;
+                height: 500px;
+                margin: auto !important;
+                display: block;
+                position: relative;
+                list-style-type: none;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                }
+                .buddy {
+                width: 100%;
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                color: #fff;
+                padding: 20px;
+                margin: 5%;
+                position: absolute;
+                cursor: hand;
+                top: 50px;
+                }
+                .buddy > * {
+                    width: 100%;
+                }
+                .rotate-left {
+                transform: rotate(30deg) scale(0.8);
+                transition: 1s;
+                margin-left: 400px;
+                cursor: e-resize;
+                opacity: 0;
+                z-index: 10;
+                }
+                .rotate-right {
+                transform: rotate(-30deg) scale(0.8);
+                transition: 1s;
+                opacity: 0;
+                margin-left: -400px;
+                cursor: w-resize;
+                z-index: 10;
+                }
+                .avatar {
+                width: 100%;
+                height: 350px;
+                display: block;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                }
+                .like {
+                border-radius: 5px;
+                padding: 5px 10px;
+                border: 2px solid green;
+                color: green;
+                text-transform: uppercase;
+                font-size: 15px;
+                position: absolute;
+                top: 50px;
+                right: 40px;
+                text-shadow: none;
+                }
+                .dislike {
+                border-radius: 5px;
+                padding: 5px 10px;
+                border: 2px solid red;
+                color: red;
+                text-transform: uppercase;
+                font-size: 15px;
+                position: absolute;
+                top: 50px;
+                left: 40px;
+                text-shadow: none;
+                }
+
+                .time-right {
+                    float: left;
+                    color: #aaa;
+                }
+
+                .chat-head {
+                    border: 1px solid white;
+                    border-radius: 50%;
+                    background-position: 50% 50%;
+                    background-size: auto 125.581%; 
+                    width: 50px;
+                    height: 50px;  
+                }
+                .container {
+                    margin:auto;
+                    background: #f7ddd1;
+                    box-shadow: 0 0px 1px 0 rgba(0,17,25,.27);
+                }
+                .mobile-footer {
+                    display: flex;
+                    position: absolute;
+                    justify-content: space-between;
+                    bottom: -120px;
+                    width: 100%;
+                }
+            }       
+            
+
         </style>
+        <script src="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                
+                let page = 1 ;
+
+                $('.option-item').on('click', function () {
+                })
+            
+                $(".buddy").on("swiperight",function(){
+                    // Like
+                    $(this).addClass('rotate-left').delay(700).fadeOut(1, function () {
+                        $(this).remove();
+                        let sendData = {
+                            product_id : $(this).attr('item_id'),
+                            user_id : <?= Auth::user()->id ?>,
+                        }
+                        $.ajax({
+                            url: 'like',
+                            method: 'POST',
+                            data: sendData,
+                            success: function (response) {
+                                console.log(response)
+                            }
+                        })
+                    });
+                    $('.buddy').find('.status').remove();
+
+                    $(this).append('<div class="status like">Like!</div>');      
+                    $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
+                    
+                });  
+
+                $(".buddy").on("swipeleft",function(){
+                    // Dislike
+                    $(this).addClass('rotate-right').delay(700).fadeOut(1);
+                    $('.buddy').find('.status').remove();
+                    $(this).append('<div class="status dislike">Dislike!</div>');
+
+                    if ( $(this).is(':last-child') ) {
+                    $('.buddy:nth-child(1)').removeClass ('rotate-left rotate-right').fadeIn(300);
+                        alert('已經滑完所有類型');
+                    } else {
+                        $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
+                    } 
+                });
+                $('.option-item').on('click', function () {
+                    $('.option-item').removeClass('active');
+                    $(this).addClass('active');
+                    let id = $(this).attr('id');
+                    if (id == 'option-item-1') {
+                        $('.mobile-main-container').hide();
+                        $('#page-1').fadeIn();
+                    } else if (id == 'option-item-2') {
+                        $('.mobile-main-container').hide();
+                        $('#page-2').fadeIn();
+                    }
+                });
+
+            });
+
+
+        </script>
     </head>
     <body>
+        {{-- <div style="display: flex; justify-content: center; align-items : center;position: absolute; width: 100%; z-index : 999; background: white;height:100vh; color: gray; text-align:center">
+            <h1 style="">
+                <p>
+                    尚在開發中！            
+                </p>
+                <p>
+                    1/15敬請期待！                    
+                </p>
+                <p>
+                    <a class="btn btn-primary" onclick="history.go(-1);">回到上一頁</a>
+                </p>
+            </h1>
+        </div> --}}
+        {{-- Mobile Version --}}
+        <div id="mobile" class="full-height">
+                <div class="mobile-nav-container">
+                    <ul class="nav mobile-nav">
+                        <li id="option-item-1" class="nav-item option-item active">
+                            <i class="bi bi-suit-heart-fill"></i>
+                        </li>
+                        <li id="option-item-2" class="nav-item option-item">
+                            <i class="bi bi-chat-fill"></i>
+                        </li>
+                        <li id="option-item-3" class="nav-item option-item">
+                            <i class="bi bi-person-fill"></i>
+                        </li>
+                    </ul>
+                </div>
+                {{-- Page 1 --}}
+                <div style="height:100%; " class="mobile-main-container" id="page-1">
+                        <div id="container" style="display: flex;justify-content:center; ">
+                            @foreach ($products as $product)
+                            <div item_id="{{ $product['id'] }}" class="buddy" style="display: block;">
+                                <p style="color: black">{{$product['title']}}</p>
+                                <div class="avatar" 
+                                style="display: block; background-image: 
+                                    url({{ asset($product['img_url']) }}); z-index: {{ $product['id'] }} ">
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="main-card-choose flex-center mobile-footer">
+                            <button class="btn-dislike-border">
+                                <i class="bi bi-hand-thumbs-down btn-dislike"></i>
+                            </button>
+                            <button class="btn-like-border">
+                                  <i class="bi bi-hand-thumbs-up btn-like"></i>
+                            </button>
+                        </div>
+                </div>
+                {{--  Page 2--}}
+                <div style="display:none" class="mobile-main-container" id="page-2">
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                    <div class="container">
+                        <img class="chat-head" src="{{ url('img/head.jpg')}}" alt="Avatar" >
+                        <b>Name</b>
+                        <p>Hello. How are you today?</p>
+                        <span class="time-right">11:00</span>
+                    </div>
+                </div>
+        </div>
+
+                
         {{-- Desktop Version --}}
         <div class="flex position-ref" id="desktop">
             <aside class="left-side-aside">
@@ -225,13 +538,13 @@
                 </div>
                 <div class="flex option-container">
                     <ul class="nav">
-                        <li class="nav-item option-item active">
+                        <li id="option-item-1" class="nav-item option-item active">
                             <button>喜歡的商品</button>
                         </li>
-                        <li class="nav-item option-item">
+                        <li id="option-item-2" class="nav-item option-item">
                             <button>留言板</button>
                         </li>
-                        <li class="nav-item option-item">
+                        <li id="option-item-3" class="nav-item option-item">
                             <button>設定</button>
                         </li>
                     </ul>
@@ -307,7 +620,6 @@
                         <div class="main-card-content">
                             <b class="main-card-title">商品名稱</b>
                         {{-- 商品簡介 --}}
-
                             <div class="main-card-introduction">
                                 <p>
                                     Introduction
@@ -329,12 +641,3 @@
         </div>
     </body>
 </html>
-
-<script>
-    $(document).ready(function() {
-        $('.option-item').on('click', function () {
-            $('.option-item').removeClass('active');
-            $(this).addClass('active');
-        }); 
-    })
-</script>

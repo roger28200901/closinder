@@ -27,4 +27,5 @@ Route::middleware('checklogin')->group(function ($id) {
 
 Route::post('/uploadMessage','MessageController@insert');
 Route::post('/updateUser','UserController@update')->name('updateUser');
+Route::get('/updateUser','UserController@index'); 
 Route::get('/home', 'HomeController@index')->name('home');

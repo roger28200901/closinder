@@ -6,6 +6,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        
+
  <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -31,6 +34,13 @@
         <link rel="stylesheet" href="{{ asset('css/bootstrap-icons.css') }}">
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+
+        <link rel="stylesheet" href="{{ asset('css/fontAwesome.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/light-box.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/owl-carousel.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/templatemo-style.css') }}">
+
         <style>
             html, body {
                 background-color: #fff;
@@ -42,10 +52,6 @@
                 height: 100%;
                 padding: 0;
                 margin: 0;
-            }
-            #desktop {
-                width: 100%; 
-                height: 100%;
             }
             .container {
                 margin: 2rem;
@@ -98,7 +104,8 @@
                 width: 25%;
             }
             aside {
-                background: white;
+                height: 84%;
+                background: #f9f9f9;
             }
             .aside-profile {
                 color: white;
@@ -135,20 +142,26 @@
                 line-height: inherit;
             }
             .option-container {
-                border-right: 1px solid lightgray;
                 border-bottom: 1px solid lightgray;
             }
             .messageContainer {
                 height: 100%;
                 flex-wrap: wrap;
-                overflow-y: auto;
+                overflow: auto;
+                background: white;
+                border-right: 1px solid lightgray;
+            }
+            .profileContainer {
+                height: 100%;
+                flex-wrap: wrap;
+                overflow: auto;
                 background: white;
                 border-right: 1px solid lightgray;
             }
             .matchContainer {
-                height: 100%;
                 flex-wrap: wrap;
-                overflow-y:auto;
+                overflow: auto;
+                height: 65%;
                 background: white;
                 border-right: 1px solid lightgray; 
             }
@@ -232,9 +245,7 @@
                 #mobile  {
                     display: none; 
                 }
-                #desktop {
-                    display: flex;
-                }
+               
 
                 /* Tinder */
 
@@ -329,6 +340,14 @@
                     margin:auto;
                     background: #e9e9e9;
                     box-shadow: 0 0px 1px 0 rgba(0,17,25,.27);
+                }
+                .profile-head {
+                    border-radius: 50%;
+                    width: 200px;
+                    height: 200px;
+                }
+                .profile-content  > * {
+                    font-size: 24px;
                 }
             }
 
@@ -487,6 +506,149 @@
 
     </head>
     <body>
+        <div class="sidebar-navigation hidde-sm hidden-xs" id="desktop">
+            <div class="logo">
+                <a href="#">Clo<em>sinder</em></a>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li class="option-item" id="option-item-1">
+                        <button style="width: 50%">喜歡的商品</button>
+                    </li>
+                    <li class="option-item" id="option-item-2">
+                        <button style="width: 50%">留言板</button>
+                    </li>
+                    <li class="option-item" id="option-item-3">
+                        <button style="width: 50%">設定</button>
+                    </li>
+                    <li >
+                        <button style="width: 50%;">
+                            <a style="color: black;" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                                          document.getElementById('logout-form').submit();">
+                             {{ __('登出') }}
+                            </a>
+                        </button>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                    
+                   
+                </ul>
+            </nav>
+            <ul class="social-icons">
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                <li><a href="#"><i class="fa fa-behance"></i></a></li>
+            </ul>
+        </div>
+
+        
+        <div class="page-content" id="desktop">
+                <div id="container" style="display: flex;justify-content:center; " class="d-product-container">
+                    @foreach ($products as $product)
+                    <div item_id="{{ $product['id'] }}" class="buddy" style="display: block;">
+                        <p style="color: black">{{$product['title']}}</p>
+                        <div class="avatar" 
+                                style="display: block; background-image: 
+                                    url({{ asset($product['img_url']) }}); z-index: {{ $product['id'] }} ">
+                        </div>
+                        <p style="color: black">
+                            {{ $product['content'] }}
+                        </p>
+                    </div>
+                    
+                    @endforeach
+                        <h1 style="top: 200px; display:flex;position: absolute;">喜歡請往左滑或不喜歡往右滑</h1>
+                </div>
+                
+                <div id="matchContainer" style="display: none;">
+                    @foreach ($likes as $like)
+                        <div class="matchElement" style="background-image: url('{{ $like['img_url'] }}')">
+                            {{ $like['title'] }}
+                        </div>
+                    @endforeach
+                </div>
+                <div id="messageContainer" style="display: none;">
+                    <p>
+                        <i style="float: right" class="bi bi-arrows-fullscreen"></i>
+                    </p>
+                    <form action="{{ action('MessageController@insert') }}" method="post">
+                        <b>標題</b>
+                        <input type="text" name="message-title-d">
+                        <b>內容</b>
+                        <textarea name="message-content-d" cols="30" rows="10"></textarea>
+                        <input type="button" id="btn-insert-message-d" value="新增留言">
+                    </form>
+                    @foreach ($messages as $message)
+                    <div class="container">
+                        <img class="chat-head" src="img/{{ $message->img_url}}" alt="Avatar" >
+                        <b>{{ $message->name}}</b>
+                        <p>
+                            <b>{{ $message->title}}</b>
+                        </p>
+                        <p>{{ $message->content}}</p>
+                        <span class="time-right">
+                            {{ $message->created_at}}
+                        </span>
+                    </div>
+                    @endforeach
+                </div>
+                <div id="profileContainer" style="display:none;" >
+                    <div style="text-align:center">
+                        <img src="img/{{ $user['img_url'] }}" class="profile-head" alt="">
+                        <p style="font-size:24px; margin-top:2%;">
+                            {{ $user['name'] }}
+                        </p>
+                    </div>
+
+                    <button id="btn-profile-setting">個人頁面設定</button>
+                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button> --}}
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <form action="{{ action('UserController@update') }}" method="POST" >
+
+                            <div class="modal-body">
+                                @csrf
+                                <div class="form-group">
+                                  <label for="recipient-name" class="col-form-label">個人姓名:</label>
+                                  <input type="text" class="form-control" id="recipient-name">
+                                </div>
+                                <div class="form-group">
+                                  <label for="message-text" class="col-form-label">個人特徵:</label>
+                                  <textarea class="form-control" id="message-text"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">更新</button>
+                            </div>
+                        </form>
+
+                          </div>
+                        </div>
+                      </div>
+                    <div class="profile-content" style="width: 100%; margin:10%; font-size:36px;">
+                            <p>信箱：{{ $user['email']}}</p>
+                            <p>個人特徵：</p>
+                            <p style="overflow:auto">
+                                個人特徵
+                            </p>
+                    </div>
+                </div>
+                
+            
+        </div>
         {{-- <div style="display: flex; justify-content: center; align-items : center;position: absolute; width: 100%; z-index : 999; background: white;height:100vh; color: gray; text-align:center">
             <h1 style="">
                 <p>
@@ -547,6 +709,7 @@
                             <i style="float: right" class="bi bi-arrows-fullscreen"></i>
                         </p>
                         <div class="upload-message-container">
+                            
                             <form action="{{ action('MessageController@insert') }}" method="post">
                                 <b>標題</b>
                                 <input type="text" name="message-title-m">
@@ -573,16 +736,14 @@
                 {{--  Page 3 --}}
                 <div style="display:none; height:100%" class="mobile-main-container" id="page-3">
                     <div class="container" id="profile-container">
-                       
-
                         <img src="img/{{ $user['img_url'] }}" class="profile-head" alt="">
                         <p>
                             {{ $user['name'] }}
                         </p>
                         <button id="btn-profile-setting">個人頁面設定</button>
                         
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
-                        <!-- Modal -->
+                        {{-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> --}}
+                        {{-- <!-- Modal -->
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-dialog">
                             
@@ -604,20 +765,15 @@
                                         <button id="btn-update-user" type="button" class="btn btn-success">更新</button>
                                         </div>
                                     </form>
-
                                 </div>
                             
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="profile-information">
                             <p>信箱：{{ $user['email']}}</p>
                             <p>個人特徵：</p>
                             <p style="overflow:auto">
-                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
-                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
-                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
-                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
-                                asdjaskldjsakljasgklasjdasjkflajlksdjlkasjflkasjsalkdjsaklgjsakdjklsajfa
+                                個人特徵
                             </p>
                         </div>
                     </div>
@@ -626,104 +782,8 @@
 
                 
         {{-- Desktop Version --}}
-        <div class="flex position-ref" id="desktop">
-            <aside class="left-side-aside">
-                <div class="flex aside-profile">
-                    {{-- 個人頭貼 --}}
-                    <img class="aside-head" style="background-image:url('img/{{ $user['img_url']}}')"alt="">
-                    <h4 class="aside-content">
-                        我的個人資料
-                    </h4>
-                    {{-- Something --}}
-                    <i></i>
-                </div>
-                <div class="flex option-container">
-                    <ul class="nav">
-                        <li id="option-item-1" class="nav-item option-item active">
-                            <button>喜歡的商品</button>
-                        </li>
-                        <li id="option-item-2" class="nav-item option-item">
-                            <button>留言板</button>
-                        </li>
-                        <li id="option-item-3" class="nav-item option-item">
-                            <button>設定</button>
-                        </li>
-                        <li id="option-item-4" class="nav-item option-item">
-                            <button>
-                                <a style="color: black;" class="" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                              document.getElementById('logout-form').submit();">
-                                 {{ __('登出') }}
-                                </a>
-                            </button>
-                           
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                        </li>   
-                    </ul>
-                </div>
-
-                <div class="matchContainer">
-                    @foreach ($likes as $like)
-                        <div class="matchElement" style="background-image: url('{{ $like['img_url'] }}')">
-                            {{ $like['title'] }}
-                        </div>
-                    @endforeach
-                </div>
-
-                <div class="messageContainer">
-                    <div class="upload-message-container">
-                        <form action="{{ action('MessageController@insert') }}" method="post">
-                            <b>標題</b>
-                            <input type="text" name="message-title-d">
-                            <b>內容</b>
-                            <textarea name="message-content-d" cols="30" rows="10"></textarea>
-                            <input type="button" id="btn-insert-message-d" value="新增留言">
-                        </form>
-                    </div>
-                    @foreach ($messages as $message)
-                    <div class="container">
-                        <img class="chat-head" src="img/{{ $message->img_url}}" alt="Avatar" >
-                        <b>{{ $message->name}}</b>
-                        <p>
-                            <b>{{ $message->title}}</b>
-                        </p>
-                        <p>{{ $message->content}}</p>
-                        <span class="time-right">
-                            {{ $message->created_at}}
-                        </span>
-                    </div>
-                    @endforeach
-                </div>
-            </aside>
-            <main class="container position-ref ">
-                <div id="container" style="display: flex;justify-content:center; " class="d-product-container">
-                    @foreach ($products as $product)
-                    <div item_id="{{ $product['id'] }}" class="buddy" style="display: block;">
-                        <p style="color: black">{{$product['title']}}</p>
-                        <div class="avatar" 
-                                style="display: block; background-image: 
-                                    url({{ asset($product['img_url']) }}); z-index: {{ $product['id'] }} ">
-                        </div>
-                        <p style="color: black">
-                            {{ $product['content'] }}
-                        </p>
-                    </div>
-                @endforeach
-                </div>
-                <div class="main-card" style="width: auto;">
-                    <div class="main-card-choose flex-center">
-                        <button class="btn-dislike-border">
-                            <i class="bi bi-hand-thumbs-down btn-dislike"></i>
-                        </button>
-                        <button class="btn-like-border">
-                              <i class="bi bi-hand-thumbs-up btn-like"></i>
-                        </button>
-                    </div>
-                </div>
-            </main>
-        </div>
+    
+    
     </body>
 
     <script>
@@ -742,6 +802,7 @@
                 object = $(this);
             });
             $('html').on('mouseup', function () {
+                if (object == null) return
                 drag = false;
                 if (dx - sx > 30) {
                     like(object);
@@ -792,9 +853,7 @@
                 like(top);
             })
 
-            $('#btn-profile-setting').on('click', function () {
-
-            });
+         
             function dislike (dislike) {
                 dislike.addClass('rotate-right').delay(700).fadeOut(1, function () {
                     dislike.remove();
@@ -825,11 +884,12 @@
                 like.next().removeClass('rotate-left rotate-right').fadeIn(400);
                 
             }
-            $('.option-item').on('click', function () {
-                $('.option-item').removeClass('active');
-                $(this).addClass('active');
-
-                let id = $(this).attr('id');
+            $('.option-item').on('click', function (ele) {
+                
+                // $('.option-item').removeClass('active');
+                // $(this).addClass('active');
+                let id = this.id;
+                console.log(id)
                 if(window.matchMedia("(max-width: 767px)").matches){
                     // The viewport is less than 768 pixels wide
                     if (id == 'option-item-1') {
@@ -844,16 +904,25 @@
                     }
                 } else{
                     // The viewport is at least 768 pixels wide
-                    if (id== 'option-item-1') {
-                        $('.matchContainer').fadeIn();
+                    if (id == 'option-item-1') {
+                        $('.d-product-container').fadeIn();
+                        $('#matchContainer').fadeIn();
+                        $('#messageContainer').hide();
+                        $('#profileContainer').hide();
                     } else if (id == 'option-item-2') {
-                        $('.matchContainer').hide();
-                        $('.messageContainer').fadeIn()
+                        $('.d-product-container').hide();
+                        $('#matchContainer').hide();
+                        $('#messageContainer').fadeIn()
+                        $('#profileContainer').hide();
+                    } else if (id == 'option-item-3') {
+                        $('.d-product-container').hide();
+                        $('#matchContainer').hide();
+                        $('#messageContainer').hide()
+                        $('#profileContainer').fadeIn();
                     }
                 }
-                
-               
             });
+            $('.matchContainer').fadeIn();
             $('.bi-arrows-fullscreen').on('click', function() {
                 $('.upload-message-container').slideToggle();
             })

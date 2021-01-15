@@ -4,9 +4,10 @@ Closinder主張簡約，乾淨，讓使用者第一印象感覺喜不喜歡衣�
 
 下載專案說明 ：
 
--  先需要安裝composer套件，以及npm管理套件，並將專案拉至本地後，設定根目錄底下.env檔案以確認連線之資料庫。
+-  先需要安裝composer套件，以及npm管理套件，並將專案拉至本地後，設定根目錄底下.env檔案以確認連線之資料庫(沒有檔案的話複製.env.example 改名為 .env)。
+-  composer install 於啟動專案前先掛載
 -  啟用此專案前請先於根目錄底下開啟cmd or Terminal 輸入 php artisan key:generate，使本專案具有金鑰啟動。
--  並設置預設資料表輸入指令 php artisan migration:refresh。
+-  並設置預設資料表輸入指令 php artisan migrate:refresh。
 -  開啟本地端伺服器或nginx使用本專案。
 
 
